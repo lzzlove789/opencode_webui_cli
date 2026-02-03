@@ -39,8 +39,11 @@ Screenshots
 1) Empty state
 ![Empty state](docs/images/empty-state.png)
 
-1) History view with files
+1) View with files
 ![History view with files](docs/images/history-files.png)
+
+1) History with Chat
+![History with Chat](docs/images/history.png)
 
 Credits
 -------
