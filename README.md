@@ -33,8 +33,8 @@ Options
 Screenshots
 -----------
 
-1) Main chat and generated files
-![Main chat and generated files](docs/images/New-project.png)
+1) Display or create project
+![Display or create project](docs/images/New-project.png)
 
 1) Empty state
 ![Empty state](docs/images/empty-state.png)
