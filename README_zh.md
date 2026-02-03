@@ -32,15 +32,14 @@ opencode-webui --opencode-model openai/gpt-5.2-codex
 
 截图
 ----
-将图片放在 `docs/images/`，文件名如下：
 
 1) 显示和创建项目 
 ![显示和创建项目](docs/images/New-project.png)
 
-2) 新界面  
+1) 新界面  
 ![新界面](docs/images/empty-state.png)
 
-3) 生成文件展示  
+1) 生成文件展示  
 ![生成文件展示](docs/images/history-files.png)
 
 1) 选择聊天记录
