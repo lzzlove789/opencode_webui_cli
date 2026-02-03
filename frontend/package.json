@@ -1,0 +1,53 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "format": "prettier --write src/ scripts/",
+    "format:check": "prettier --check src/ scripts/",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "playwright:install": "npx playwright install",
+    "record-demo": "npx tsx scripts/record-demo.ts",
+    "capture-screenshots": "npx tsx scripts/capture-screenshots.ts"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "dayjs": "^1.11.13",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.6.2"
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-code": "1.0.108",
+    "@eslint/js": "^9.25.0",
+    "@playwright/test": "^1.48.2",
+    "@tailwindcss/vite": "^4.1.13",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react-swc": "^4.1.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.3.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.5",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.42.0",
+    "vite": "^7.1.6",
+    "vitest": "^3.2.4"
+  }
+}

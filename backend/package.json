@@ -1,0 +1,76 @@
+{
+  "name": "opencode-webui",
+  "version": "0.1.56",
+  "type": "module",
+  "description": "Web-based interface for the opencode CLI with streaming chat interface",
+  "keywords": [
+    "opencode",
+    "opencode-cli",
+    "ai",
+    "web-ui",
+    "chat",
+    "opencode-ai",
+    "backend",
+    "nodejs"
+  ],
+  "author": "opencode-webui",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anomalyco/opencode.git",
+    "directory": "opencode_webui/backend"
+  },
+  "bugs": {
+    "url": "https://github.com/anomalyco/opencode/issues"
+  },
+  "homepage": "https://opencode.ai",
+  "main": "dist/cli/node.js",
+  "bin": {
+    "opencode-webui": "dist/cli/node.js"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "predev": "node scripts/generate-version.js",
+    "dev": "tsx watch cli/node.ts --debug",
+    "prebuild": "node scripts/generate-version.js",
+    "build": "npm run build:clean && npm run build:bundle && npm run build:static",
+    "build:clean": "rimraf dist",
+    "build:bundle": "node scripts/build-bundle.js",
+    "build:static": "node scripts/copy-frontend.js",
+    "start": "node dist/cli/node.js",
+    "test": "vitest --run --reporter=verbose",
+    "lint": "eslint \"**/*.ts\" --ignore-pattern dist/",
+    "format": "prettier --write \"**/*.ts\"",
+    "format:check": "prettier --check \"**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "prepack": "node scripts/prepack.js",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.0.0",
+    "@logtape/logtape": "^1.0.0",
+    "@logtape/pretty": "^1.0.0",
+    "commander": "^14.0.0",
+    "hono": "^4.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "esbuild": "^0.25.6",
+    "eslint": "^9.0.0",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.4"
+  },
+  "peerDependencies": {}
+}

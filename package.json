@@ -1,0 +1,34 @@
+{
+  "name": "opencode_webui_cli",
+  "version": "1.0.4",
+  "bin": {
+    "opencode-webui": "backend/cli/index.js",
+    "opencode_webui": "backend/cli/index.js",
+    "opencode_webui_cli": "backend/cli/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "opencode",
+    "webui",
+    "cli"
+  ],
+  "author": "lzzlove789",
+  "license": "Apache-2.0",
+  "description": "opencode_webui_cli/.claude opencode_webui_cli/.git opencode_webui_cli/backend opencode_webui_cli/docs opencode_webui_cli/frontend opencode_webui_cli/shared opencode_webui_cli/.gitignore opencode_webui_cli/.lefthook.yml opencode_webui_cli/.mcp.json opencode_webui_cli/.tagpr opencode_webui_cli/LICENSE opencode_webui_cli/Makefile opencode_webui_cli/package.json opencode_webui_cli/README",
+  "files": [
+    "backend/",
+    "backend/cli/version.ts",
+    "LICENSE",
+    "README"
+  ],
+  "dependencies": {
+    "@hono/node-server": "^1.0.0",
+    "@logtape/logtape": "^1.0.0",
+    "@logtape/pretty": "^1.0.0",
+    "commander": "^14.0.0",
+    "hono": "^4.8.5",
+    "tsx": "^4.0.0"
+  }
+}
