@@ -1,5 +1,6 @@
 OpenCode Web UI (CLI Package)
 =============================
+[English](./README.md) | [中文](./README_zh.md)
 
 A Web UI wrapper for the OpenCode CLI.
 
