@@ -32,15 +32,14 @@ Options
 
 Screenshots
 -----------
-Place the images in `docs/images/` and keep the filenames below.
 
 1) Main chat and generated files
-![Main chat and generated files](docs/images/main-chat-files.png)
+![Main chat and generated files](docs/images/New-project.png)
 
-2) Empty state
+1) Empty state
 ![Empty state](docs/images/empty-state.png)
 
-3) History view with files
+1) History view with files
 ![History view with files](docs/images/history-files.png)
 
 Credits
