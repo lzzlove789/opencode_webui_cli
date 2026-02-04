@@ -19,7 +19,7 @@ npm i -g opencode_webui_cli
 使用
 ----
 ```bash
-opencode-webui --opencode-model openai/gpt-5.2-codex
+opencode-webui 
 ```
 
 参数
@@ -30,20 +30,33 @@ opencode-webui --opencode-model openai/gpt-5.2-codex
 - `--opencode-model <model>`：opencode CLI 默认模型
 - `-d, --debug`：启用调试模式
 
-截图
+功能截图
 ----
 
-1) 显示和创建项目 
-![显示和创建项目](docs/images/New-project.png)
+1) 项目展示
+![项目展示](docs/images/project_display.png)
 
-1) 新界面  
-![新界面](docs/images/empty-state.png)
+1) 新建项目
+![新建项目](docs/images/create_new_project.png)
 
-1) 生成文件展示  
-![生成文件展示](docs/images/history-files.png)
+1) 新对话
+![新对话](docs/images/empty-state.png)
 
-1) 选择聊天记录
-![选择聊天记录](docs/images/history.png)
+1) Plan 模式
+![Plan 模式](docs/images/Plan.png)
+
+1) Build 模式
+![Build 模式](docs/images/Build.png)
+
+1) 模型选择
+![模型选择](docs/images/models.png)
+
+1) 模型连接
+![模型连接](docs/images/connect.png)
+
+1) 历史记录
+![历史记录](docs/images/history.png)
+
 
 致谢
 ----

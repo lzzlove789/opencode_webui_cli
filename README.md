@@ -20,7 +20,7 @@ npm i -g opencode_webui_cli
 Usage
 -----
 ```bash
-opencode-webui --opencode-model openai/gpt-5.2-codex
+opencode-webui
 ```
 
 Options
@@ -34,14 +34,26 @@ Options
 Screenshots
 -----------
 
-1) Display or create project
-![Display or create project](docs/images/New-project.png)
+1) Display project
+![Display project](docs/images/project_display.png)
+
+1) create project
+![create project](docs/images/create_new_project.png)
 
 1) Empty state
 ![Empty state](docs/images/empty-state.png)
 
-1) View with files
-![History view with files](docs/images/history-files.png)
+1) Plan mode
+![Plan mode](docs/images/Plan.png)
+
+1) Build mode
+![Build mode](docs/images/Build.png)
+
+1) Model selection
+![Model selection](docs/images/models.png)
+
+1) Model connect
+![Model connect](docs/images/connect.png)
 
 1) History with Chat
 ![History with Chat](docs/images/history.png)
