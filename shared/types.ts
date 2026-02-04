@@ -11,6 +11,7 @@ export interface ChatRequest {
   allowedTools?: string[];
   workingDirectory?: string;
   permissionMode?: "default" | "plan" | "acceptEdits";
+  model?: string;
 }
 
 export interface AbortRequest {
@@ -63,6 +64,10 @@ export interface HistoryListResponse {
     dataType?: string;
     firstKeys?: string;
   };
+}
+
+export interface ModelsResponse {
+  models: string[];
 }
 
 // Conversation history types
