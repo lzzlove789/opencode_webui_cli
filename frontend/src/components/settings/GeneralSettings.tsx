@@ -90,6 +90,7 @@ export function GeneralSettings() {
               chat input.
             </div>
           </div>
+
         </div>
       </div>
     </div>

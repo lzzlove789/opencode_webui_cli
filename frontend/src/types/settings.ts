@@ -5,6 +5,7 @@ export interface AppSettings {
   theme: Theme;
   enterBehavior: EnterBehavior;
   version: number;
+  model?: string;
 }
 
 export interface LegacySettings {
@@ -26,6 +27,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   theme: "light",
   enterBehavior: "send",
   version: 1,
+  model: undefined,
 };
 
 // Current settings version for migration

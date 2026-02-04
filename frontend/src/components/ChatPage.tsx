@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
 import type {
   ChatRequest,
   ChatMessage,
@@ -15,6 +15,7 @@ import { usePermissionMode } from "../hooks/chat/usePermissionMode";
 import { useAbortController } from "../hooks/chat/useAbortController";
 import { useAutoHistoryLoader } from "../hooks/useHistoryLoader";
 import { useFileCanvas } from "../hooks/useFileCanvas";
+import { useSettings } from "../hooks/useSettings";
 import { SettingsButton } from "./SettingsButton";
 import { SettingsModal } from "./SettingsModal";
 import { HistoryButton } from "./chat/HistoryButton";
@@ -44,6 +45,7 @@ export function ChatPage() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFileCanvasOpen, setIsFileCanvasOpen] = useState(false);
   const lastRecentScanRef = useRef<number>(0);
+  const { settings } = useSettings();
 
   // Extract and normalize working directory from URL
   const workingDirectory = (() => {
@@ -118,6 +120,7 @@ export function ChatPage() {
     hasShownInitMessage,
     currentAssistantMessage,
     setInput,
+    setMessages,
     setCurrentSessionId,
     setHasShownInitMessage,
     setHasReceivedInit,
@@ -400,6 +403,7 @@ export function ChatPage() {
             allowedTools: tools || allowedTools,
             ...(workingDirectory ? { workingDirectory } : {}),
             permissionMode: overridePermissionMode || permissionMode,
+            ...(settings.model ? { model: settings.model } : {}),
           } as ChatRequest),
         });
 
@@ -469,6 +473,7 @@ export function ChatPage() {
       currentAssistantMessage,
       workingDirectory,
       permissionMode,
+      settings.model,
       generateRequestId,
       clearInput,
       startRequest,
@@ -639,9 +644,44 @@ export function ChatPage() {
 
   const handleBackToProjectChat = useCallback(() => {
     if (workingDirectory) {
-      navigate(`/projects${workingDirectory}`);
+      navigate(`/projects/${workingDirectory}`);
     }
   }, [navigate, workingDirectory]);
+
+  const handleNewChat = useCallback(() => {
+    if (isLoading && currentRequestId) {
+      handleAbort();
+    }
+    resetRequestState();
+    clearInput();
+    setMessages([]);
+    setCurrentSessionId(null);
+    setHasShownInitMessage(false);
+    setHasReceivedInit(false);
+    setCurrentAssistantMessage(null);
+    closePermissionRequest();
+    closePlanModeRequest();
+    if (workingDirectory) {
+      navigate(`/projects/${workingDirectory}`);
+    } else {
+      navigate({ search: "" });
+    }
+  }, [
+    isLoading,
+    currentRequestId,
+    handleAbort,
+    resetRequestState,
+    clearInput,
+    setMessages,
+    setCurrentSessionId,
+    setHasShownInitMessage,
+    setHasReceivedInit,
+    setCurrentAssistantMessage,
+    closePermissionRequest,
+    closePlanModeRequest,
+    navigate,
+    workingDirectory,
+  ]);
 
   // Handle global keyboard shortcuts
   useEffect(() => {
@@ -730,6 +770,17 @@ export function ChatPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            {!isHistoryView && (
+              <button
+                onClick={handleNewChat}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 transition-all duration-200 backdrop-blur-sm shadow-sm hover:shadow-md text-sm font-medium text-slate-700 dark:text-slate-200"
+                title="New conversation"
+                aria-label="New conversation"
+              >
+                <PlusIcon className="w-4 h-4" />
+                New Chat
+              </button>
+            )}
             {!isHistoryView && <HistoryButton onClick={handleHistoryClick} />}
             <button
               onClick={() => setIsFileCanvasOpen(!isFileCanvasOpen)}

@@ -6,6 +6,8 @@ export const API_CONFIG = {
     PROJECTS: "/api/projects",
     HISTORIES: "/api/projects",
     CONVERSATIONS: "/api/projects",
+    MODELS: "/api/models",
+    PROVIDERS: "/api/providers",
   },
 } as const;
 
@@ -27,6 +29,26 @@ export const getChatUrl = () => {
 // Helper function to get projects URL
 export const getProjectsUrl = () => {
   return API_CONFIG.ENDPOINTS.PROJECTS;
+};
+
+export const getModelsUrl = () => {
+  return API_CONFIG.ENDPOINTS.MODELS;
+};
+
+export const getProvidersUrl = () => {
+  return API_CONFIG.ENDPOINTS.PROVIDERS;
+};
+
+export const getProviderApiKeyUrl = (providerID: string) => {
+  return `${API_CONFIG.ENDPOINTS.PROVIDERS}/${encodeURIComponent(providerID)}/api-key`;
+};
+
+export const getProviderOauthAuthorizeUrl = (providerID: string) => {
+  return `${API_CONFIG.ENDPOINTS.PROVIDERS}/${encodeURIComponent(providerID)}/oauth/authorize`;
+};
+
+export const getProviderOauthCallbackUrl = (providerID: string) => {
+  return `${API_CONFIG.ENDPOINTS.PROVIDERS}/${encodeURIComponent(providerID)}/oauth/callback`;
 };
 
 // Helper function to create project URL

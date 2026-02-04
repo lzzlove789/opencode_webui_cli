@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { StopIcon } from "@heroicons/react/24/solid";
 import { UI_CONSTANTS, KEYBOARD_SHORTCUTS } from "../../utils/constants";
-import { useEnterBehavior } from "../../hooks/useSettings";
+import { useEnterBehavior, useSettings } from "../../hooks/useSettings";
 import { PermissionInputPanel } from "./PermissionInputPanel";
 import { PlanPermissionInputPanel } from "./PlanPermissionInputPanel";
 import type { PermissionMode } from "../../types";
+import { getModelsUrl } from "../../config/api";
+import { ConnectProviderModal } from "../ConnectProviderModal";
 
 interface PermissionData {
   patterns: string[];
@@ -68,6 +70,10 @@ export function ChatInput({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [isComposing, setIsComposing] = useState(false);
   const { enterBehavior } = useEnterBehavior();
+  const { settings, updateSettings } = useSettings();
+  const [models, setModels] = useState<string[]>([]);
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [isConnectOpen, setIsConnectOpen] = useState(false);
 
   // Focus input when not loading and not in permission mode
   useEffect(() => {
@@ -89,6 +95,36 @@ export function ChatInput({
       textarea.style.height = `${scrollHeight}px`;
     }
   }, [input]);
+
+  useEffect(() => {
+    const loadModels = async () => {
+      setModelsLoading(true);
+      try {
+        const response = await fetch(getModelsUrl());
+        if (!response.ok) {
+          throw new Error(`Failed to load models (${response.status})`);
+        }
+        const data = (await response.json()) as { models?: string[] };
+        setModels(Array.isArray(data.models) ? data.models : []);
+      } catch (error) {
+        console.error("Failed to load models:", error);
+        setModels([]);
+      } finally {
+        setModelsLoading(false);
+      }
+    };
+
+    loadModels();
+  }, []);
+
+  const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value.trim();
+    updateSettings({ model: value.length > 0 ? value : undefined });
+  };
+
+  const handleOpenConnect = () => {
+    setIsConnectOpen(true);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -249,19 +285,49 @@ export function ChatInput({
       </form>
 
       {/* Permission mode status bar */}
-      <button
-        type="button"
-        onClick={() =>
-          onPermissionModeChange(getNextPermissionMode(permissionMode))
-        }
-        className="w-full px-4 py-1 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-mono text-left transition-colors cursor-pointer"
-        title={`Current: ${getPermissionModeName(permissionMode)} - Click to cycle (Ctrl+Shift+M)`}
-      >
-        {getPermissionModeIndicator(permissionMode)}
-        <span className="ml-2 text-slate-400 dark:text-slate-500 text-[10px]">
-          - Click to cycle (Ctrl+Shift+M)
-        </span>
-      </button>
+      <div className="flex items-center justify-between gap-4">
+        <button
+          type="button"
+          onClick={() =>
+            onPermissionModeChange(getNextPermissionMode(permissionMode))
+          }
+          className="px-4 py-1 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-mono text-left transition-colors cursor-pointer"
+          title={`Current: ${getPermissionModeName(permissionMode)} - Click to cycle (Ctrl+Shift+M)`}
+        >
+          {getPermissionModeIndicator(permissionMode)}
+          <span className="ml-2 text-slate-400 dark:text-slate-500 text-[10px]">
+            - Click to cycle (Ctrl+Shift+M)
+          </span>
+        </button>
+        <div className="flex items-center gap-2">
+          <select
+            value={settings.model ?? ""}
+            onChange={handleModelChange}
+            className="px-2 py-1 text-xs bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 dark:text-slate-200"
+            title="Model"
+          >
+            <option value="">Model: default</option>
+            {models.map((model) => (
+              <option key={model} value={model}>
+                {model}
+              </option>
+            ))}
+            {modelsLoading && <option value="">Loading...</option>}
+          </select>
+          <button
+            type="button"
+            onClick={handleOpenConnect}
+            className="px-2 py-1 text-xs bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
+            title="Connect providers"
+          >
+            Connect
+          </button>
+        </div>
+      </div>
+      <ConnectProviderModal
+        isOpen={isConnectOpen}
+        onClose={() => setIsConnectOpen(false)}
+      />
     </div>
   );
 }
