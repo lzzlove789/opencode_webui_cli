@@ -20,6 +20,13 @@ import { handleHistoriesRequest } from "./handlers/histories.ts";
 import { handleConversationRequest } from "./handlers/conversations.ts";
 import { handleChatRequest } from "./handlers/chat.ts";
 import { handleAbortRequest } from "./handlers/abort.ts";
+import { handleModelsRequest } from "./handlers/models.ts";
+import {
+  handleProvidersRequest,
+  handleProviderApiKey,
+  handleProviderOauthAuthorize,
+  handleProviderOauthCallback,
+} from "./handlers/providers.ts";
 import {
   handleFileRequest,
   handleFileInfoRequest,
@@ -83,6 +90,19 @@ export function createApp(
   );
 
   app.post("/api/chat", (c) => handleChatRequest(c, requestAbortControllers));
+
+  app.get("/api/models", (c) => handleModelsRequest(c));
+  app.get("/api/providers", (c) => handleProvidersRequest(c));
+  app.post("/api/providers/:providerID/api-key", (c) => handleProviderApiKey(c));
+  app.post(
+    "/api/providers/:providerID/oauth/authorize",
+    (c) => handleProviderOauthAuthorize(c),
+  );
+  app.post(
+    "/api/providers/:providerID/oauth/callback",
+    (c) => handleProviderOauthCallback(c),
+  );
+
 
   // File API routes for file canvas feature
   app.get("/api/file", (c) => handleFileRequest(c));

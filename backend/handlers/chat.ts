@@ -1,5 +1,4 @@
 import { Context } from "hono";
-import { Context } from "hono";
 import type { ChatRequest, StreamResponse } from "../../shared/types.ts";
 import { logger } from "../utils/logger.ts";
 import type { RequestState } from "../opencode/request.ts";
@@ -21,13 +20,53 @@ type CliEvent = {
   error?: unknown;
 };
 
-const PERMISSION_ALLOW_ALL = JSON.stringify({ "*": "allow" });
+const PERMISSION_ALLOW_ALL = JSON.stringify({
+  read: "allow",
+  edit: "allow",
+  glob: "allow",
+  grep: "allow",
+  list: "allow",
+  bash: "allow",
+  task: "allow",
+  external_directory: "allow",
+  todowrite: "allow",
+  todoread: "allow",
+  question: "deny",
+  webfetch: "allow",
+  websearch: "allow",
+  codesearch: "allow",
+  lsp: "allow",
+  doom_loop: "allow",
+  skill: "allow",
+});
+
+const PERMISSION_DENY_ALL = JSON.stringify({ "*": "deny" });
+
+function getPermissionEnv(mode?: ChatRequest["permissionMode"]) {
+  if (mode === "plan") return PERMISSION_DENY_ALL;
+  return PERMISSION_ALLOW_ALL;
+}
 
 const encoder = new TextEncoder();
 
 function getEventSession(event: CliEvent, fallback?: string) {
   if (event.sessionID && typeof event.sessionID === "string") return event.sessionID;
   return fallback;
+}
+
+function isExitPlanModeTool(part: any): boolean {
+  const tool = typeof part?.tool === "string" ? part.tool : "";
+  const normalized = tool.toLowerCase().replace(/[_-]/g, "");
+  return normalized === "exitplanmode";
+}
+
+function createExitPlanModeResultItem(part: any) {
+  return {
+    type: "tool_result",
+    tool_use_id: part.callID,
+    content: "Exit plan mode?",
+    is_error: true,
+  };
 }
 
 function createToolUseResult(part: any) {
@@ -84,8 +123,10 @@ export async function handleChatRequest(
         requestAbortControllers.set(chatRequest.requestId, requestState);
 
         const args = ["run", "--format", "json"];
-        if (opencodeModel) {
-          args.push("--model", opencodeModel);
+        const requestedModel = chatRequest.model?.trim();
+        const model = requestedModel || opencodeModel;
+        if (model) {
+          args.push("--model", model);
         }
         if (chatRequest.sessionId) {
           args.push("--session", chatRequest.sessionId);
@@ -93,7 +134,7 @@ export async function handleChatRequest(
         args.push(chatRequest.message);
 
         const env = {
-          OPENCODE_PERMISSION: PERMISSION_ALLOW_ALL,
+          OPENCODE_PERMISSION: getPermissionEnv(chatRequest.permissionMode),
           OPENCODE_CLIENT: "cli",
         };
 
@@ -158,11 +199,14 @@ export async function handleChatRequest(
                 content: [createToolUseItem(part)],
               }),
             });
+            const toolResultItem = isExitPlanModeTool(part)
+              ? createExitPlanModeResultItem(part)
+              : createToolResultItem(part);
             enqueueResponse(controller, {
               type: "claude_json",
               data: createUserMessage({
                 sessionId: resolvedSessionId,
-                content: [createToolResultItem(part)],
+                content: [toolResultItem],
                 toolUseResult: createToolUseResult(part),
               }),
             });
