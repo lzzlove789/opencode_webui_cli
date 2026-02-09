@@ -1,6 +1,6 @@
 {
   "name": "opencode_webui_cli",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "bin": {
     "opencode-webui": "backend/cli/index.js",
     "opencode_webui": "backend/cli/index.js",
