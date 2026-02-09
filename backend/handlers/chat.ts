@@ -43,8 +43,13 @@ const PERMISSION_ALLOW_ALL = JSON.stringify({
 const PERMISSION_DENY_ALL = JSON.stringify({ "*": "deny" });
 
 function getPermissionEnv(mode?: ChatRequest["permissionMode"]) {
-  if (mode === "plan") return PERMISSION_DENY_ALL;
+  if (mode === "plan" || mode === "default") return PERMISSION_DENY_ALL;
   return PERMISSION_ALLOW_ALL;
+}
+
+function getAgentName(mode?: ChatRequest["permissionMode"]) {
+  if (mode === "acceptEdits") return "build";
+  return "plan";
 }
 
 const encoder = new TextEncoder();
@@ -131,6 +136,7 @@ export async function handleChatRequest(
         if (chatRequest.sessionId) {
           args.push("--session", chatRequest.sessionId);
         }
+        args.push("--agent", getAgentName(chatRequest.permissionMode));
         args.push(chatRequest.message);
 
         const env = {
